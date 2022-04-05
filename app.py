@@ -31,10 +31,15 @@ def users_route():
     elif request.method == "POST":
         try:
             global id_counter
+            for p in request.json.get("predmeti"):
+                if "ime" not in p.keys() or "espb" not in p.keys():
+                    raise BadRequestKeyError
             user = {
                 "ime": request.json["ime"],
+                "prezime": request.json["prezime"],
                 "username": request.json.get("username"),
-                "ocena": request.json.get("ocena"),
+                "smer": request.json.get("smer"),
+                "predmeti": [p for p in request.json.get("predmeti")],
                 "id": id_counter
             }
             id_counter += 1
@@ -43,8 +48,8 @@ def users_route():
             return user, 201
         except (BadRequestKeyError, Exception, TypeError) as e:
             logging.error(e)
-            return {"error": str(e)}, 429
+            return {"error": str(e)}, 400
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=8081, debug=False)
+    app.run(host="localhost", port=8081, debug=True)
