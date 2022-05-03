@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+   name: request-app
+spec:
+   containers:
+   - name: server-app
+     image: request
+     ports:
+     - containerPort: 5000
